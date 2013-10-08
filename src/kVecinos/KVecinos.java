@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class KVecinos {
 	
@@ -68,10 +69,21 @@ public class KVecinos {
 	 * @param ficheroTest
 	 * @param ficheroTraining
 	 */
-	public static void CalculoDistanciaMinima(String ficheroTest, String ficheroTraining){
+	public static HashMap<Character, Integer> vecinoMasCercano(String ficheroTest, String ficheroTraining){
+		HashMap<Character, Integer> mapaco = new HashMap<>();
 		try {
-			BufferedReader brTraining = new BufferedReader(new FileReader(new File("training.cad")));
-			BufferedReader brTest = new BufferedReader(new FileReader(new File("test.cad")));
+			Character letra = 'A';
+			// Inicializo el map a 0;
+			for(int i=0; i<26; i++){
+//				Integer current = mapaco.get(letra);
+//				current++;
+				mapaco.put(letra, 0);
+				letra++;
+			}
+				
+			
+			BufferedReader brTraining = new BufferedReader(new FileReader(new File(ficheroTraining)));
+			BufferedReader brTest = new BufferedReader(new FileReader(new File(ficheroTest)));
 //			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("salida.txt")));
 			ArrayList<String> lTraining = new ArrayList<>();
 			ArrayList<String> lTest = new ArrayList<>();
@@ -99,27 +111,54 @@ public class KVecinos {
 						etiquetaMin = item2.split(" ")[0];
 					}					
 				}
-				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
+//				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
 				if(item.split(" ")[0].equals(etiquetaMin))
-					aciertos++;
+					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
 			}
 			System.out.println("El índice de acierto es de "+ (double)aciertos/lTest.size()*100.0);
 			brTraining.close();
 			brTest.close();
 			
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return mapaco;
 	}
 
 	public static void main(String[] args) {
-		
 //		crearArchivosEquilibrados();
-		
+		HashMap<Character, Integer> aciertosGlobales = new HashMap<>();
+		ArrayList<HashMap<Character, Integer>> listaAciertosParciales = new ArrayList<>();
 		for(int i=0; i<4; i++){
-			CalculoDistanciaMinima("salida"+(i+1)+".txt", "0");
+			System.out.println("Procesando fichero: salida"+(i+1)+".txt");
+			HashMap<Character, Integer> aciertos = vecinoMasCercano("salida"+(i+1)+".txt", "salida0.txt");
+			Character letra = 'A';
+			for(int j=0; j<26; j++){
+				Integer parcial = aciertos.get(letra);
+				if(i!=0)
+					aciertosGlobales.put(letra, aciertosGlobales.get(letra)+parcial);
+				else aciertosGlobales.put(letra, parcial);
+			}
+			listaAciertosParciales.add(aciertos);
+			letra++;
 		}
+		Character letra = 'A';
+		for(int i=0; i<26; i++){
+			if(i<25)
+				System.out.print(letra+"\t");
+			else System.out.print(letra+"\n");
+			letra++;
+		}
+		letra = 'A';
+		for(int i=0; i<26; i++){
+			if(i<25)
+				System.out.print(aciertosGlobales.get(letra)+"\t");
+			else System.out.print(aciertosGlobales.get(letra)+"\n");
+			letra++;
+		}
+		
 	}
 
 }
