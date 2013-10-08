@@ -127,36 +127,55 @@ public class KVecinos {
 
 	public static void main(String[] args) {
 //		crearArchivosEquilibrados();
-		HashMap<Character, Integer> aciertosGlobales = new HashMap<>();
-		ArrayList<HashMap<Character, Integer>> listaAciertosParciales = new ArrayList<>();
-		for(int i=0; i<4; i++){
-			System.out.println("Procesando fichero: salida"+(i+1)+".txt");
-			HashMap<Character, Integer> aciertos = vecinoMasCercano("salida"+(i+1)+".txt", "salida0.txt");
-			Character letra = 'A';
-			for(int j=0; j<26; j++){
-				Integer parcial = aciertos.get(letra);
-				if(i!=0)
-					aciertosGlobales.put(letra, aciertosGlobales.get(letra)+parcial);
-				else aciertosGlobales.put(letra, parcial);
-				letra++;
-			}
-			listaAciertosParciales.add(aciertos);
-			
-		}
 		Character letra = 'A';
+		
+		ArrayList<HashMap<Character, Integer>> listaAciertosParciales = new ArrayList<>();
+		// Dibujo la fila de arriba de la tabla e inicializo los aciertos globales
 		for(int i=0; i<26; i++){
 			if(i<25)
 				System.out.print(letra+"\t");
 			else System.out.print(letra+"\n");
 			letra++;
 		}
-		letra = 'A';
-		for(int i=0; i<26; i++){
-			if(i<25)
-				System.out.print(aciertosGlobales.get(letra)+"\t");
-			else System.out.print(aciertosGlobales.get(letra)+"\n");
-			letra++;
+		
+		for(int j=0; j<5; j++){
+//			System.out.println("Usando archivo test: salida"+j+".txt");
+			HashMap<Character, Integer> aciertosGlobales = new HashMap<>();
+			// Inicializo los globales
+			letra = 'A';
+			for(int i=0; i<26; i++){
+				aciertosGlobales.put(letra, 0);
+				letra++;
+			}
+			for(int i=0; i<5; i++){
+				if(i!=j){
+//					System.out.println("Procesando fichero: salida"+i+".txt");
+					HashMap<Character, Integer> aciertos = vecinoMasCercano("salida"+i+".txt", "salida"+j+".txt");
+					letra = 'A';
+					for(int k=0; k<26; k++){
+						Integer parcial = aciertos.get(letra);
+						aciertosGlobales.put(letra, aciertosGlobales.get(letra)+parcial);
+						letra++;
+					}
+					listaAciertosParciales.add(aciertos);
+				}
+			}
+			letra = 'A';
+			for(int i=0; i<26; i++){
+				if(i<25)
+					System.out.print(aciertosGlobales.get(letra)+"\t");
+				else System.out.print(aciertosGlobales.get(letra)+"\n");
+				letra++;
+			}
 		}
+		
+//		letra = 'A';
+//		for(int i=0; i<26; i++){
+//			if(i<25)
+//				System.out.print(aciertosGlobales.get(letra)+"\t");
+//			else System.out.print(aciertosGlobales.get(letra)+"\n");
+//			letra++;
+//		}
 		
 	}
 
