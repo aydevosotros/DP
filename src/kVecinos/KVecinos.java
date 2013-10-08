@@ -12,8 +12,7 @@ import java.util.HashMap;
 
 public class KVecinos {
 	
-	public static HashMap<Character, ArrayList<String>> filtraCosas(){
-		// 26 clases
+	public static void crearArchivosEquilibrados(){
 		HashMap<Character, ArrayList<String>> mapaco = new HashMap<Character, ArrayList<String>>();
 		Character inicial = 'A';
 		// Inicializo el hashmap
@@ -35,6 +34,7 @@ public class KVecinos {
 				}
 				line = br1.readLine();
 			}
+			br1.close();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -60,29 +60,30 @@ public class KVecinos {
 			}
 		} catch (Exception ex){
 			System.out.println(ex.getMessage());
-		}
-		
-		
-		return mapaco;
-		
+		}		
 	}
 	
-	public static void CalculoDistanciaMinima(){
+	/**
+	 * Calcular las distancias entre el test y el training
+	 * @param ficheroTest
+	 * @param ficheroTraining
+	 */
+	public static void CalculoDistanciaMinima(String ficheroTest, String ficheroTraining){
 		try {
-			BufferedReader br1 = new BufferedReader(new FileReader(new File("training.cad")));
-			BufferedReader br2 = new BufferedReader(new FileReader(new File("test.cad")));
+			BufferedReader brTraining = new BufferedReader(new FileReader(new File("training.cad")));
+			BufferedReader brTest = new BufferedReader(new FileReader(new File("test.cad")));
 //			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("salida.txt")));
 			ArrayList<String> lTraining = new ArrayList<>();
 			ArrayList<String> lTest = new ArrayList<>();
-			String line = br1.readLine();
+			String line = brTraining.readLine();
 			while(line != null){
 				lTraining.add(line);
-				line = br1.readLine();
+				line = brTraining.readLine();
 			}
-			line = br2.readLine();
+			line = brTest.readLine();
 			while(line != null){
 				lTest.add(line);
-				line = br2.readLine();
+				line = brTest.readLine();
 			}
 			int aciertos=0;
 			System.out.println(lTraining.size());
@@ -103,6 +104,8 @@ public class KVecinos {
 					aciertos++;
 			}
 			System.out.println("El índice de acierto es de "+ (double)aciertos/lTest.size()*100.0);
+			brTraining.close();
+			brTest.close();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -112,7 +115,11 @@ public class KVecinos {
 
 	public static void main(String[] args) {
 		
-		HashMap<Character, ArrayList<String>> mapaco = filtraCosas();
+//		crearArchivosEquilibrados();
+		
+		for(int i=0; i<4; i++){
+			CalculoDistanciaMinima("salida"+(i+1)+".txt", "0");
+		}
 	}
 
 }
