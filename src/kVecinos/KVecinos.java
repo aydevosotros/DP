@@ -98,8 +98,6 @@ public class KVecinos {
 				line = brTest.readLine();
 			}
 			int aciertos=0;
-			System.out.println(lTraining.size());
-			System.out.println(lTest.size());
 			int distanciaMin = Integer.MAX_VALUE;
 			String etiquetaMin = "";
 			for(String item : lTest){
@@ -115,7 +113,7 @@ public class KVecinos {
 				if(item.split(" ")[0].equals(etiquetaMin))
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
 			}
-			System.out.println("El índice de acierto es de "+ (double)aciertos/lTest.size()*100.0);
+//			System.out.println("El índice de acierto es de "+ (double)aciertos/lTest.size()*100.0);
 			brTraining.close();
 			brTest.close();
 			
@@ -140,9 +138,10 @@ public class KVecinos {
 				if(i!=0)
 					aciertosGlobales.put(letra, aciertosGlobales.get(letra)+parcial);
 				else aciertosGlobales.put(letra, parcial);
+				letra++;
 			}
 			listaAciertosParciales.add(aciertos);
-			letra++;
+			
 		}
 		Character letra = 'A';
 		for(int i=0; i<26; i++){
