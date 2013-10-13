@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class KVecinos {
 	
@@ -195,7 +194,6 @@ public class KVecinos {
 			
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return mapaco;
@@ -209,7 +207,6 @@ public class KVecinos {
 		try {
 			bw = new BufferedWriter(new FileWriter(new File("resultados.txt")));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -221,7 +218,6 @@ public class KVecinos {
 				try {
 					bw.write(letra+"\t");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else{
@@ -229,7 +225,6 @@ public class KVecinos {
 				try {
 					bw.write(letra+"\n");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -265,7 +260,6 @@ public class KVecinos {
 					try {
 						bw.write(aciertosGlobales.get(letra)+"\t");
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}else {
@@ -273,7 +267,6 @@ public class KVecinos {
 					try {
 						bw.write(aciertosGlobales.get(letra)+"\n");
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -282,7 +275,6 @@ public class KVecinos {
 			try {
 				bw.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
