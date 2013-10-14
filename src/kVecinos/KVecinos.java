@@ -27,7 +27,15 @@ public class KVecinos {
 					vecinos[j]= aux;
 					aux=aux2;
 				}
+				break;
 			}
+		}
+	}
+	
+	public static void printKVecinos(){
+		for(int i=0; i<nVecinos; i++){
+			if(vecinos[i] != null)
+				System.out.println(vecinos[i]);
 		}
 	}
 	
@@ -196,7 +204,6 @@ public class KVecinos {
 			brTraining.close();
 			brTest.close();
 			
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -205,6 +212,23 @@ public class KVecinos {
 	}
 
 	public static void main(String[] args) {
+		
+		nVecinos = 5;
+		vecinos = new Integer[nVecinos];
+		// Inicializo el vector
+		for(int i=0; i<nVecinos; i++){
+			vecinos[i]=Integer.MAX_VALUE;
+		}
+		
+		// Hago una pruebecica
+		checkKVecinos(10);
+		checkKVecinos(5);
+		checkKVecinos(11);
+		checkKVecinos(25);
+		checkKVecinos(2);
+		checkKVecinos(3);
+		printKVecinos();
+		
 //		crearArchivosEquilibrados();
 		Character letra = 'A';
 		BufferedWriter bw = null;
