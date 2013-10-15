@@ -145,8 +145,7 @@ public class KVecinos {
 			for(int i=0; i<26; i++){
 				mapaco.put(letra, 0);
 				letra++;
-			}
-				
+			}		
 			
 			BufferedReader brTraining = new BufferedReader(new FileReader(new File(ficheroTraining)));
 			BufferedReader brTest = new BufferedReader(new FileReader(new File(ficheroTest)));
@@ -175,8 +174,10 @@ public class KVecinos {
 					
 				}
 				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + mejorEtiqueta);
-				if(item.split(" ")[0].equals(mejorEtiqueta))
+				if(item.split(" ")[0].equals(mejorEtiqueta)){
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
+					System.out.println("La etiqueta es buena");
+				}
 			}
 //			System.out.println("El índice de acierto es de "+ (double)aciertos/lTest.size()*100.0);
 			brTraining.close();
