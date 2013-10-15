@@ -250,25 +250,31 @@ public class KVecinos {
 		return mapaco;
 	}
 
-	public static void main(String[] args) {
+	@SuppressWarnings("resource")
+	public static void main(String[] args) throws IOException {
+		BufferedWriter resultado;
+		resultado = new BufferedWriter(new FileWriter(new File("resultado.csv")));
 		
 		nVecinos = 5;
 		
-//		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida0.txt", "salida1.txt");
+		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida0Mini.txt", "salida1Mini.txt");
 		HashMap<Character, Integer> mapacoKCercanos = kVecinosMasCercanos("salida0Mini.txt", "salida1Mini.txt");
+		
+		resultado.write("Data sets,Algorithm 1,Algorithm 2\n");
 		
 		char letra = 'A';
 		for(int i=0; i<26; i++){
 			System.out.println("Para la "+ letra +":");
 			System.out.println("Con el más cercano tengo: " + mapacoKCercanos.get(letra));
-//			System.out.println("Con el k vecions: " + mapacoCercano.get(letra));
+			System.out.println("Con el k vecinos: " + mapacoCercano.get(letra));
+			resultado.write(letra+","+mapacoCercano.get(letra)+","+mapacoCercano.get(letra)+"\n");
 			letra++;
 		}
 		
 //		PruebasDeKVecinos();
 //		crearArchivosEquilibrados();
 //		PruebasConTodo();
-		
+		resultado.close();
 	}
 
 	/**
