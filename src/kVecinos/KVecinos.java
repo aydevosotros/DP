@@ -10,26 +10,72 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class KVecinos {
 	
-	public static Integer vecinos[];
+	public static Candidato vecinos[];
 	public static Integer nVecinos;
 	
-	public static void checkKVecinos(Integer distancia){
+	public static void checkKVecinos(Candidato candidato){
 		for(int i=0; i< nVecinos; i++){
-			if(distancia < vecinos[i]){
-				Integer aux = vecinos[i];
-				Integer aux2;
-				vecinos[i] = distancia;
+			if(candidato.getDistancia() < vecinos[i].getDistancia()){
+				Candidato aux = vecinos[i];
+				Candidato aux2;
+				vecinos[i] = candidato;
 				for(int j=i+1; j<nVecinos; j++){
 					aux2 = vecinos[j];
 					vecinos[j]= aux;
 					aux=aux2;
 				}
+				break;
 			}
 		}
+	}
+	
+	public static void printKVecinos(){
+		for(int i=0; i<nVecinos; i++){
+			if(vecinos[i] != null)
+				System.out.println(vecinos[i].getDistancia());
+		}
+	}
+	
+	public static void inicializarKVecinos(){
+		vecinos = new Candidato[nVecinos];
+		// Inicializo el vector
+		for(int i=0; i<nVecinos; i++){
+			vecinos[i] = new Candidato("null", Integer.MAX_VALUE);
+		}
+	}
+	
+	// Esto está por implementar
+	public static Character getMejorCandidatoSumando(){
+		HashMap<Character, Integer> etiquetas = new HashMap<>();
+		for(int i=0; i<nVecinos; i++){
+			if(etiquetas.containsKey(vecinos[i].getEtiqueta())){
+				
+			}
+		}
+		return 'A';
+	}
+	
+	public static String getMejorCandidatoPonderando(){
+		ArrayList<Candidato> mejores = new ArrayList<>();
+		for(Candidato v : vecinos){
+			boolean insertada = false;
+			for(Candidato m : mejores){
+				if(m.getEtiqueta() == m.getEtiqueta()){
+					m.setDistancia(m.getDistancia()+(1/v.getDistancia()));
+					insertada = true;
+				}
+			}
+			if(!insertada)
+				mejores.add(new Candidato(v.getEtiqueta(), 1/v.getDistancia()));
+		}
+		Collections.sort(mejores);
+		
+		return mejores.get(0).getEtiqueta();
 	}
 	
 	public static void crearArchivosEquilibrados(){
@@ -57,6 +103,7 @@ public class KVecinos {
 			br1.close();
 			
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -90,16 +137,15 @@ public class KVecinos {
 	 */
 	public static HashMap<Character, Integer> kVecinosMasCercanos(String ficheroTest, String ficheroTraining){
 		HashMap<Character, Integer> mapaco = new HashMap<>();
+		// Inicializo el vector de vecinos
+		
 		try {
 			Character letra = 'A';
 			// Inicializo el map a 0;
 			for(int i=0; i<26; i++){
-//				Integer current = mapaco.get(letra);
-//				current++;
 				mapaco.put(letra, 0);
 				letra++;
-			}
-				
+			}		
 			
 			BufferedReader brTraining = new BufferedReader(new FileReader(new File(ficheroTraining)));
 			BufferedReader brTest = new BufferedReader(new FileReader(new File(ficheroTest)));
@@ -116,20 +162,22 @@ public class KVecinos {
 				lTest.add(line);
 				line = brTest.readLine();
 			}
-			int distanciaMin = Integer.MAX_VALUE;
-			String etiquetaMin = "";
+			String mejorEtiqueta = "null";
 			for(String item : lTest){
-				distanciaMin = Integer.MAX_VALUE;
+				inicializarKVecinos();
 				for(String item2 : lTraining){
 					int distancia = Levenshtein.computeLevenshteinDistance(item.split(" ")[1], item2.split(" ")[1]);
-					if(distancia < distanciaMin){
-						distanciaMin = distancia;
-						etiquetaMin = item2.split(" ")[0];
-					}					
+					Candidato candidato = new Candidato(item2.split(" ")[0], distancia);
+					checkKVecinos(candidato);
+//					// Ahora tengo que determinar la clase a la que pertenece en base al vector	
+					mejorEtiqueta = getMejorCandidatoPonderando();
+					
 				}
-//				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
-				if(item.split(" ")[0].equals(etiquetaMin))
+				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + mejorEtiqueta);
+				if(item.split(" ")[0].equals(mejorEtiqueta)){
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
+					System.out.println("La etiqueta es buena");
+				}
 			}
 //			System.out.println("El índice de acierto es de "+ (double)aciertos/lTest.size()*100.0);
 			brTraining.close();
@@ -137,6 +185,7 @@ public class KVecinos {
 			
 			
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return mapaco;
@@ -158,8 +207,7 @@ public class KVecinos {
 //				current++;
 				mapaco.put(letra, 0);
 				letra++;
-			}
-				
+			}				
 			
 			BufferedReader brTraining = new BufferedReader(new FileReader(new File(ficheroTraining)));
 			BufferedReader brTest = new BufferedReader(new FileReader(new File(ficheroTest)));
@@ -187,7 +235,7 @@ public class KVecinos {
 						etiquetaMin = item2.split(" ")[0];
 					}					
 				}
-//				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
+				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
 				if(item.split(" ")[0].equals(etiquetaMin))
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
 			}
@@ -195,21 +243,50 @@ public class KVecinos {
 			brTraining.close();
 			brTest.close();
 			
-			
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return mapaco;
 	}
 
-	public static void main(String[] args) {
+	@SuppressWarnings("resource")
+	public static void main(String[] args) throws IOException {
+		BufferedWriter resultado;
+		resultado = new BufferedWriter(new FileWriter(new File("resultado.csv")));
 //		crearArchivosEquilibrados();
+
+//		PruebasConTodo();
+		resultado.close();
+	}
+
+	/**
+	 * 
+	 */
+	private static void PruebasDeKVecinos() {
+		inicializarKVecinos();
+		// Hago una pruebecica
+//		checkKVecinos(new Candidato('A', 10));
+//		checkKVecinos(new Candidato('A', 5));
+//		checkKVecinos(new Candidato('A', 2));
+//		checkKVecinos(new Candidato('A', 44));
+//		checkKVecinos(new Candidato('A', 22));
+//		checkKVecinos(new Candidato('A', 1));
+//		checkKVecinos(new Candidato('A', 23));
+		printKVecinos();
+	}
+
+	/**
+	 * 
+	 */
+	private static void PruebasConTodo() {
 		Character letra = 'A';
 		BufferedWriter bw = null;
 		
 		try {
 			bw = new BufferedWriter(new FileWriter(new File("resultados.txt")));
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -221,6 +298,7 @@ public class KVecinos {
 				try {
 					bw.write(letra+"\t");
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else{
@@ -228,6 +306,7 @@ public class KVecinos {
 				try {
 					bw.write(letra+"\n");
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -263,6 +342,7 @@ public class KVecinos {
 					try {
 						bw.write(aciertosGlobales.get(letra)+"\t");
 					} catch (IOException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}else {
@@ -270,6 +350,7 @@ public class KVecinos {
 					try {
 						bw.write(aciertosGlobales.get(letra)+"\n");
 					} catch (IOException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -278,9 +359,11 @@ public class KVecinos {
 			try {
 				bw.close();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
 		
 //		letra = 'A';
 //		for(int i=0; i<26; i++){
@@ -289,7 +372,6 @@ public class KVecinos {
 //			else System.out.print(aciertosGlobales.get(letra)+"\n");
 //			letra++;
 //		}
-		
 	}
 
 }
