@@ -375,6 +375,7 @@ public class KVecinos {
 			}
 		}
 		
+		
 //		letra = 'A';
 //		for(int i=0; i<26; i++){
 //			if(i<25)
