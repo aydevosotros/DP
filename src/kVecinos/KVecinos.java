@@ -68,6 +68,7 @@ public class KVecinos {
 				if(m.getEtiqueta() == m.getEtiqueta()){
 					m.setDistancia(m.getDistancia()+(1/v.getDistancia()));
 					insertada = true;
+					break;
 				}
 			}
 			if(!insertada)
@@ -176,7 +177,7 @@ public class KVecinos {
 				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + mejorEtiqueta);
 				if(item.split(" ")[0].equals(mejorEtiqueta)){
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
-					System.out.println("La etiqueta es buena");
+//					System.out.println("La etiqueta es buena");
 				}
 			}
 //			System.out.println("El índice de acierto es de "+ (double)aciertos/lTest.size()*100.0);
@@ -235,7 +236,7 @@ public class KVecinos {
 						etiquetaMin = item2.split(" ")[0];
 					}					
 				}
-				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
+//				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
 				if(item.split(" ")[0].equals(etiquetaMin))
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
 			}
@@ -252,13 +253,22 @@ public class KVecinos {
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException {
+		
+//		PruebasConDosAlgoritmosBasica();		
+//		PruebasConTodoVecinoMasCercano();
+		PruebasConTodoKVecinos();
+		
+	}
+
+	private static void PruebasConDosAlgoritmosBasica() throws IOException {
 		BufferedWriter resultado;
 		resultado = new BufferedWriter(new FileWriter(new File("resultado.csv")));
 //		crearArchivosEquilibrados();
-nVecinos = 5;
 		
-		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida0Mini.txt", "salida1Mini.txt");
-		HashMap<Character, Integer> mapacoKCercanos = kVecinosMasCercanos("salida0Mini.txt", "salida1Mini.txt");
+		nVecinos = 5;
+		
+		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida3.txt", "salida1.txt");
+		HashMap<Character, Integer> mapacoKCercanos = kVecinosMasCercanos("salida3.txt", "salida1.txt");
 		
 		resultado.write("Data sets,Algorithm 1,Algorithm 2\n");
 		
@@ -270,7 +280,6 @@ nVecinos = 5;
 			resultado.write(letra+","+mapacoCercano.get(letra)+","+mapacoCercano.get(letra)+"\n");
 			letra++;
 		}
-//		PruebasConTodo();
 		resultado.close();
 	}
 
@@ -293,7 +302,7 @@ nVecinos = 5;
 	/**
 	 * 
 	 */
-	private static void PruebasConTodo() {
+	private static void PruebasConTodoVecinoMasCercano() {
 		Character letra = 'A';
 		BufferedWriter bw = null;
 		
@@ -377,15 +386,93 @@ nVecinos = 5;
 				e.printStackTrace();
 			}
 		}
+
+	}
+	
+	private static void PruebasConTodoKVecinos(){
+		Character letra = 'A';
+		BufferedWriter bw = null;
 		
+		try {
+			bw = new BufferedWriter(new FileWriter(new File("resultados.txt")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-//		letra = 'A';
-//		for(int i=0; i<26; i++){
-//			if(i<25)
-//				System.out.print(aciertosGlobales.get(letra)+"\t");
-//			else System.out.print(aciertosGlobales.get(letra)+"\n");
-//			letra++;
-//		}
+		ArrayList<HashMap<Character, Integer>> listaAciertosParciales = new ArrayList<>();
+		// Dibujo la fila de arriba de la tabla e inicializo los aciertos globales
+		for(int i=0; i<26; i++){
+			if(i<25){
+				System.out.print(letra+"\t");
+				try {
+					bw.write(letra+"\t");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else{
+				System.out.print(letra+"\n");
+				try {
+					bw.write(letra+"\n");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			letra++;
+		}
+		
+		for(int j=0; j<5; j++){
+//				System.out.println("Usando archivo test: salida"+j+".txt");
+			HashMap<Character, Integer> aciertosGlobales = new HashMap<>();
+			// Inicializo los globales
+			letra = 'A';
+			for(int i=0; i<26; i++){
+				aciertosGlobales.put(letra, 0);
+				letra++;
+			}
+			for(int i=0; i<5; i++){
+				if(i!=j){
+//						System.out.println("Procesando fichero: salida"+i+".txt");
+					HashMap<Character, Integer> aciertos = vecinoMasCercano("salida"+i+".txt", "salida"+j+".txt");
+					letra = 'A';
+					for(int k=0; k<26; k++){
+						Integer parcial = aciertos.get(letra);
+						aciertosGlobales.put(letra, aciertosGlobales.get(letra)+parcial);
+						letra++;
+					}
+					listaAciertosParciales.add(aciertos);
+				}
+			}
+			letra = 'A';
+			for(int i=0; i<26; i++){
+				if(i<25){
+					System.out.print(aciertosGlobales.get(letra)+"\t");
+					try {
+						bw.write(aciertosGlobales.get(letra)+"\t");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else {
+					System.out.print(aciertosGlobales.get(letra)+"\n");
+					try {
+						bw.write(aciertosGlobales.get(letra)+"\n");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				letra++;
+			}
+			try {
+				bw.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
