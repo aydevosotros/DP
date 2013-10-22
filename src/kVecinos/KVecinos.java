@@ -423,6 +423,13 @@ public class KVecinos {
 			letra++;
 		}
 		
+		try {
+			bw.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		for(int j=0; j<5; j++){
 //				System.out.println("Usando archivo test: salida"+j+".txt");
 			HashMap<Character, Integer> aciertosGlobales = new HashMap<>();
@@ -444,6 +451,13 @@ public class KVecinos {
 					}
 					listaAciertosParciales.add(aciertos);
 				}
+			}
+			
+			try {
+				bw = new BufferedWriter(new FileWriter(new File("resultados.txt")));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			letra = 'A';
 			for(int i=0; i<26; i++){
