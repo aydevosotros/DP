@@ -1,8 +1,6 @@
 package kVecinos;
 
-import javax.swing.Icon;
-
-public class Candidato implements Comparable {
+public class Candidato implements Comparable<Object> {
 	Candidato(String et, Integer dist){
 		this.etiqueta=et;
 		this.distancia=dist;

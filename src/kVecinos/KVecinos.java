@@ -3,15 +3,12 @@ package kVecinos;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.PriorityQueue;
 
 public class KVecinos {
 	
@@ -104,7 +101,6 @@ public class KVecinos {
 			br1.close();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -186,7 +182,6 @@ public class KVecinos {
 			
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return mapaco;
@@ -245,18 +240,16 @@ public class KVecinos {
 			brTest.close();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return mapaco;
 	}
 
-	@SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException {
 		
-//		PruebasConDosAlgoritmosBasica();		
+		PruebasConDosAlgoritmosBasica();		
 //		PruebasConTodoVecinoMasCercano();
-		PruebasConTodoKVecinos();
+//		PruebasConTodoKVecinos();
 		
 	}
 
@@ -267,8 +260,8 @@ public class KVecinos {
 		
 		nVecinos = 5;
 		
-		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida3.txt", "salida1.txt");
-		HashMap<Character, Integer> mapacoKCercanos = kVecinosMasCercanos("salida3.txt", "salida1.txt");
+		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida0UltraMini.txt", "salida1UltraMini.txt");
+		HashMap<Character, Integer> mapacoKCercanos = kVecinosMasCercanos("salida0UltraMini.txt", "salida1UltraMini.txt");
 		
 		resultado.write("Data sets,Algorithm 1,Algorithm 2\n");
 		
@@ -348,7 +341,7 @@ public class KVecinos {
 			for(int i=0; i<5; i++){
 				if(i!=j){
 //					System.out.println("Procesando fichero: salida"+i+".txt");
-					HashMap<Character, Integer> aciertos = vecinoMasCercano("salida"+i+".txt", "salida"+j+".txt");
+					HashMap<Character, Integer> aciertos = kVecinosMasCercanos("salida"+i+".txt", "salida"+j+".txt");
 					letra = 'A';
 					for(int k=0; k<26; k++){
 						Integer parcial = aciertos.get(letra);
