@@ -50,38 +50,29 @@ public class KVecinos {
 	public static Character getMejorCandidatoSumando(){
 		HashMap<Character, Integer> etiquetas = new HashMap<>();
 		for(int i=0; i<nVecinos; i++){
-			int n = 0;
-			if(etiquetas.get(vecinos[i].getEtiqueta()) != null)
-				n = etiquetas.get(vecinos[i].getEtiqueta())+1;
-			etiquetas.put(vecinos[i].getEtiqueta().charAt(0), n);
+			if(etiquetas.containsKey(vecinos[i].getEtiqueta())){
+				
+			}
 		}
-		char letra = 'A';
-		Integer min = Integer.MAX_VALUE;
-		char minLetra = '>';
-		for(int i=0; i<26; i++){
-			if(etiquetas.get(letra) != null)
-				if(etiquetas.get(letra) < min){
-					min = etiquetas.get(letra);
-					minLetra = letra;
-				}
-		}
-		return minLetra;
+		return 'A';
 	}
 	
 	public static String getMejorCandidatoPonderando(){
 		ArrayList<Candidato> mejores = new ArrayList<>();
 		for(Candidato v : vecinos){
 			boolean insertada = false;
-			for(Candidato m : mejores){
-				if(m.getEtiqueta() == m.getEtiqueta()){
-					m.setDistancia(m.getDistancia()+(1/v.getDistancia()));
+			for(Candidato m : mejores){				
+				if(m.getEtiqueta() == v.getEtiqueta()){
+					m.setDistancia(m.getDistancia()+(int)((1/(double)v.getDistancia())*1000));
 					insertada = true;
 					break;
-				}
+				}				
 			}
 			if(!insertada)
-				mejores.add(new Candidato(v.getEtiqueta(), 1/v.getDistancia()));
+				mejores.add(new Candidato(v.getEtiqueta(), (int)((1/(double)v.getDistancia())*1000)));
 		}
+//		for(Candidato c : mejores)
+//			System.out.println("Miro el candidato con distancia: "+c.getDistancia()+" y etiqueta "+c.getEtiqueta());
 		Collections.sort(mejores);
 		
 		return mejores.get(0).getEtiqueta();
@@ -176,12 +167,10 @@ public class KVecinos {
 				for(String item2 : lTraining){
 					int distancia = Levenshtein.computeLevenshteinDistance(item.split(" ")[1], item2.split(" ")[1]);
 					Candidato candidato = new Candidato(item2.split(" ")[0], distancia);
-					checkKVecinos(candidato);//																
+					checkKVecinos(candidato);					
 				}
-				// Ahora tengo que determinar la clase a la que pertenece en base al vector
-//				mejorEtiqueta = getMejorCandidatoPonderando();
-				mejorEtiqueta = getMejorCandidatoSumando().toString();
-//				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + mejorEtiqueta);
+				mejorEtiqueta = getMejorCandidatoPonderando();
+				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + mejorEtiqueta);
 				if(item.split(" ")[0].equals(mejorEtiqueta)){
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
 //					System.out.println("La etiqueta es buena");
@@ -210,8 +199,6 @@ public class KVecinos {
 			Character letra = 'A';
 			// Inicializo el map a 0;
 			for(int i=0; i<26; i++){
-//				Integer current = mapaco.get(letra);
-//				current++;
 				mapaco.put(letra, 0);
 				letra++;
 			}				
@@ -242,7 +229,7 @@ public class KVecinos {
 						etiquetaMin = item2.split(" ")[0];
 					}					
 				}
-//				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
+				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
 				if(item.split(" ")[0].equals(etiquetaMin))
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
 			}
@@ -257,9 +244,8 @@ public class KVecinos {
 	}
 
 	public static void main(String[] args) throws IOException {
-		nVecinos=7;
-		PruebasConDosAlgoritmosBasica();	
-//		PruebasDeKVecinos();
+		
+		PruebasConDosAlgoritmosBasica();		
 //		PruebasConTodoVecinoMasCercano();
 //		PruebasConTodoKVecinos();
 		
@@ -270,6 +256,8 @@ public class KVecinos {
 		resultado = new BufferedWriter(new FileWriter(new File("resultado.csv")));
 //		crearArchivosEquilibrados();
 		
+		nVecinos = 7;
+		
 		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida0Mini.txt", "salida1Mini.txt");
 		HashMap<Character, Integer> mapacoKCercanos = kVecinosMasCercanos("salida0Mini.txt", "salida1Mini.txt");
 		
@@ -278,9 +266,9 @@ public class KVecinos {
 		char letra = 'A';
 		for(int i=0; i<26; i++){
 			System.out.println("Para la "+ letra +":");
-			System.out.println("Con el más cercano tengo: " + mapacoCercano.get(letra));
-			System.out.println("Con el k vecinos: " + mapacoKCercanos.get(letra));
-			resultado.write(letra+","+mapacoCercano.get(letra)+","+mapacoKCercanos.get(letra)+"\n");
+			System.out.println("Con el más cercano tengo: " + mapacoKCercanos.get(letra));
+			System.out.println("Con el k vecinos: " + mapacoCercano.get(letra));
+			resultado.write(letra+","+mapacoCercano.get(letra)+","+mapacoCercano.get(letra)+"\n");
 			letra++;
 		}
 		resultado.close();
