@@ -61,16 +61,18 @@ public class KVecinos {
 		ArrayList<Candidato> mejores = new ArrayList<>();
 		for(Candidato v : vecinos){
 			boolean insertada = false;
-			for(Candidato m : mejores){
-				if(m.getEtiqueta() == m.getEtiqueta()){
-					m.setDistancia(m.getDistancia()+(1/v.getDistancia()));
+			for(Candidato m : mejores){				
+				if(m.getEtiqueta() == v.getEtiqueta()){
+					m.setDistancia(m.getDistancia()+(int)((1/(double)v.getDistancia())*1000));
 					insertada = true;
 					break;
-				}
+				}				
 			}
 			if(!insertada)
-				mejores.add(new Candidato(v.getEtiqueta(), 1/v.getDistancia()));
+				mejores.add(new Candidato(v.getEtiqueta(), (int)((1/(double)v.getDistancia())*1000)));
 		}
+//		for(Candidato c : mejores)
+//			System.out.println("Miro el candidato con distancia: "+c.getDistancia()+" y etiqueta "+c.getEtiqueta());
 		Collections.sort(mejores);
 		
 		return mejores.get(0).getEtiqueta();
@@ -165,11 +167,9 @@ public class KVecinos {
 				for(String item2 : lTraining){
 					int distancia = Levenshtein.computeLevenshteinDistance(item.split(" ")[1], item2.split(" ")[1]);
 					Candidato candidato = new Candidato(item2.split(" ")[0], distancia);
-					checkKVecinos(candidato);
-//					// Ahora tengo que determinar la clase a la que pertenece en base al vector	
-					mejorEtiqueta = getMejorCandidatoPonderando();
-					
+					checkKVecinos(candidato);					
 				}
+				mejorEtiqueta = getMejorCandidatoPonderando();
 				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + mejorEtiqueta);
 				if(item.split(" ")[0].equals(mejorEtiqueta)){
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
@@ -199,8 +199,6 @@ public class KVecinos {
 			Character letra = 'A';
 			// Inicializo el map a 0;
 			for(int i=0; i<26; i++){
-//				Integer current = mapaco.get(letra);
-//				current++;
 				mapaco.put(letra, 0);
 				letra++;
 			}				
@@ -231,7 +229,7 @@ public class KVecinos {
 						etiquetaMin = item2.split(" ")[0];
 					}					
 				}
-//				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
+				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + etiquetaMin);
 				if(item.split(" ")[0].equals(etiquetaMin))
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
 			}
@@ -258,10 +256,10 @@ public class KVecinos {
 		resultado = new BufferedWriter(new FileWriter(new File("resultado.csv")));
 //		crearArchivosEquilibrados();
 		
-		nVecinos = 5;
+		nVecinos = 7;
 		
-		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida0UltraMini.txt", "salida1UltraMini.txt");
-		HashMap<Character, Integer> mapacoKCercanos = kVecinosMasCercanos("salida0UltraMini.txt", "salida1UltraMini.txt");
+		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida0Mini.txt", "salida1Mini.txt");
+		HashMap<Character, Integer> mapacoKCercanos = kVecinosMasCercanos("salida0Mini.txt", "salida1Mini.txt");
 		
 		resultado.write("Data sets,Algorithm 1,Algorithm 2\n");
 		
