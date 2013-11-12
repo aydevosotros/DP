@@ -50,11 +50,22 @@ public class KVecinos {
 	public static Character getMejorCandidatoSumando(){
 		HashMap<Character, Integer> etiquetas = new HashMap<>();
 		for(int i=0; i<nVecinos; i++){
-			if(etiquetas.containsKey(vecinos[i].getEtiqueta())){
-				
-			}
+			int n = 0;
+			if(etiquetas.get(vecinos[i].getEtiqueta()) != null)
+				n = etiquetas.get(vecinos[i].getEtiqueta())+1;
+			etiquetas.put(vecinos[i].getEtiqueta().charAt(0), n);
 		}
-		return 'A';
+		char letra = 'A';
+		Integer min = Integer.MAX_VALUE;
+		char minLetra = '>';
+		for(int i=0; i<26; i++){
+			if(etiquetas.get(letra) != null)
+				if(etiquetas.get(letra) < min){
+					min = etiquetas.get(letra);
+					minLetra = letra;
+				}
+		}
+		return minLetra;
 	}
 	
 	public static String getMejorCandidatoPonderando(){
@@ -165,12 +176,12 @@ public class KVecinos {
 				for(String item2 : lTraining){
 					int distancia = Levenshtein.computeLevenshteinDistance(item.split(" ")[1], item2.split(" ")[1]);
 					Candidato candidato = new Candidato(item2.split(" ")[0], distancia);
-					checkKVecinos(candidato);
-//					// Ahora tengo que determinar la clase a la que pertenece en base al vector	
-					mejorEtiqueta = getMejorCandidatoPonderando();
-					
+					checkKVecinos(candidato);//																
 				}
-				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + mejorEtiqueta);
+				// Ahora tengo que determinar la clase a la que pertenece en base al vector
+//				mejorEtiqueta = getMejorCandidatoPonderando();
+				mejorEtiqueta = getMejorCandidatoSumando().toString();
+//				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + mejorEtiqueta);
 				if(item.split(" ")[0].equals(mejorEtiqueta)){
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
 //					System.out.println("La etiqueta es buena");
@@ -246,8 +257,9 @@ public class KVecinos {
 	}
 
 	public static void main(String[] args) throws IOException {
-		
-		PruebasConDosAlgoritmosBasica();		
+		nVecinos=7;
+		PruebasConDosAlgoritmosBasica();	
+//		PruebasDeKVecinos();
 //		PruebasConTodoVecinoMasCercano();
 //		PruebasConTodoKVecinos();
 		
@@ -258,19 +270,17 @@ public class KVecinos {
 		resultado = new BufferedWriter(new FileWriter(new File("resultado.csv")));
 //		crearArchivosEquilibrados();
 		
-		nVecinos = 5;
-		
-		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida0UltraMini.txt", "salida1UltraMini.txt");
-		HashMap<Character, Integer> mapacoKCercanos = kVecinosMasCercanos("salida0UltraMini.txt", "salida1UltraMini.txt");
+		HashMap<Character, Integer> mapacoCercano = vecinoMasCercano("salida0Mini.txt", "salida1Mini.txt");
+		HashMap<Character, Integer> mapacoKCercanos = kVecinosMasCercanos("salida0Mini.txt", "salida1Mini.txt");
 		
 		resultado.write("Data sets,Algorithm 1,Algorithm 2\n");
 		
 		char letra = 'A';
 		for(int i=0; i<26; i++){
 			System.out.println("Para la "+ letra +":");
-			System.out.println("Con el más cercano tengo: " + mapacoKCercanos.get(letra));
-			System.out.println("Con el k vecinos: " + mapacoCercano.get(letra));
-			resultado.write(letra+","+mapacoCercano.get(letra)+","+mapacoCercano.get(letra)+"\n");
+			System.out.println("Con el más cercano tengo: " + mapacoCercano.get(letra));
+			System.out.println("Con el k vecinos: " + mapacoKCercanos.get(letra));
+			resultado.write(letra+","+mapacoCercano.get(letra)+","+mapacoKCercanos.get(letra)+"\n");
 			letra++;
 		}
 		resultado.close();
@@ -282,13 +292,13 @@ public class KVecinos {
 	private static void PruebasDeKVecinos() {
 		inicializarKVecinos();
 		// Hago una pruebecica
-//		checkKVecinos(new Candidato('A', 10));
-//		checkKVecinos(new Candidato('A', 5));
-//		checkKVecinos(new Candidato('A', 2));
-//		checkKVecinos(new Candidato('A', 44));
-//		checkKVecinos(new Candidato('A', 22));
-//		checkKVecinos(new Candidato('A', 1));
-//		checkKVecinos(new Candidato('A', 23));
+		checkKVecinos(new Candidato("A", 10));
+		checkKVecinos(new Candidato("A", 5));
+		checkKVecinos(new Candidato("A", 2));
+		checkKVecinos(new Candidato("A", 44));
+		checkKVecinos(new Candidato("A", 22));
+		checkKVecinos(new Candidato("A", 1));
+		checkKVecinos(new Candidato("A", 23));
 		printKVecinos();
 	}
 
