@@ -12,38 +12,15 @@ import java.util.HashMap;
 
 public class KVecinos {
 	
-	public static Candidato vecinos[];
-	public static Integer nVecinos;
+	private static Candidato vecinos[];
+	private static Integer nVecinos;
 	
-	public static void checkKVecinos(Candidato candidato){
-		for(int i=0; i< nVecinos; i++){
-			if(candidato.getDistancia() < vecinos[i].getDistancia()){
-				Candidato aux = vecinos[i];
-				Candidato aux2;
-				vecinos[i] = candidato;
-				for(int j=i+1; j<nVecinos; j++){
-					aux2 = vecinos[j];
-					vecinos[j]= aux;
-					aux=aux2;
-				}
-				break;
-			}
-		}
-	}
-	
-	public static void printKVecinos(){
-		for(int i=0; i<nVecinos; i++){
-			if(vecinos[i] != null)
-				System.out.println(vecinos[i].getDistancia());
-		}
-	}
-	
-	public static void inicializarKVecinos(){
-		vecinos = new Candidato[nVecinos];
-		// Inicializo el vector
-		for(int i=0; i<nVecinos; i++){
-			vecinos[i] = new Candidato("null", Integer.MAX_VALUE);
-		}
+	public static void main(String[] args) throws IOException {
+		
+		PruebasConDosAlgoritmosBasica();		
+//		PruebasConTodoVecinoMasCercano();
+//		PruebasConTodoKVecinos();
+		
 	}
 	
 	// Esto está por implementar
@@ -243,13 +220,6 @@ public class KVecinos {
 		return mapaco;
 	}
 
-	public static void main(String[] args) throws IOException {
-		
-		PruebasConDosAlgoritmosBasica();		
-//		PruebasConTodoVecinoMasCercano();
-//		PruebasConTodoKVecinos();
-		
-	}
 
 	private static void PruebasConDosAlgoritmosBasica() throws IOException {
 		BufferedWriter resultado;
@@ -477,6 +447,37 @@ public class KVecinos {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	private static void printKVecinos(){
+		for(int i=0; i<nVecinos; i++){
+			if(vecinos[i] != null)
+				System.out.println(vecinos[i].getDistancia());
+		}
+	}
+	
+	private static void checkKVecinos(Candidato candidato){
+		for(int i=0; i< nVecinos; i++){
+			if(candidato.getDistancia() < vecinos[i].getDistancia()){
+				Candidato aux = vecinos[i];
+				Candidato aux2;
+				vecinos[i] = candidato;
+				for(int j=i+1; j<nVecinos; j++){
+					aux2 = vecinos[j];
+					vecinos[j]= aux;
+					aux=aux2;
+				}
+				break;
+			}
+		}
+	}
+	
+	private static void inicializarKVecinos(){
+		vecinos = new Candidato[nVecinos];
+		// Inicializo el vector
+		for(int i=0; i<nVecinos; i++){
+			vecinos[i] = new Candidato("null", Integer.MAX_VALUE);
 		}
 	}
 
