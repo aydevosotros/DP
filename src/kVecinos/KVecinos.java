@@ -17,9 +17,9 @@ public class KVecinos {
 	
 	public static void main(String[] args) throws IOException {
 		
-		//TODO: Aquí están diferentes pruebas. Entrad en los métodos y echar un vistazo. Son muy fáciles.
+		//Aquí están diferentes pruebas. Entrad en los métodos y echar un vistazo. Son muy fáciles.
 		
-		PruebasConDosAlgoritmosBasica();		
+		ejecucionDosAlgoritmosVecinos();		
 //		PruebasConTodoVecinoMasCercano();
 //		PruebasConTodoKVecinos();
 		
@@ -28,7 +28,7 @@ public class KVecinos {
 	
 	//TODO: Estos métodos son diferentes formas de ponderar los k-vecinos. Se invita a implementar más
 	
-	// Esto está por implementar
+	//TODO: Revisar que este método funciona correctamente
 	private static Character getMejorCandidatoSumando(){
 		HashMap<Character, Integer> etiquetas = new HashMap<>();
 		for(int i=0; i<nVecinos; i++){
@@ -126,7 +126,6 @@ public class KVecinos {
 			
 			BufferedReader brTraining = new BufferedReader(new FileReader(new File(ficheroTraining)));
 			BufferedReader brTest = new BufferedReader(new FileReader(new File(ficheroTest)));
-//			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("salida.txt")));
 			ArrayList<String> lTraining = new ArrayList<>();
 			ArrayList<String> lTest = new ArrayList<>();
 			String line = brTraining.readLine();
@@ -151,10 +150,8 @@ public class KVecinos {
 				System.out.println("Este tiene la etiqueta " + item.split(" ")[0] + " y la mínima es " + mejorEtiqueta);
 				if(item.split(" ")[0].equals(mejorEtiqueta)){
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
-//					System.out.println("La etiqueta es buena");
 				}
 			}
-//			System.out.println("El índice de acierto es de "+ (double)aciertos/lTest.size()*100.0);
 			brTraining.close();
 			brTest.close();
 			
@@ -183,7 +180,6 @@ public class KVecinos {
 			
 			BufferedReader brTraining = new BufferedReader(new FileReader(new File(ficheroTraining)));
 			BufferedReader brTest = new BufferedReader(new FileReader(new File(ficheroTest)));
-//			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("salida.txt")));
 			ArrayList<String> lTraining = new ArrayList<>();
 			ArrayList<String> lTest = new ArrayList<>();
 			String line = brTraining.readLine();
@@ -211,7 +207,6 @@ public class KVecinos {
 				if(item.split(" ")[0].equals(etiquetaMin))
 					mapaco.put(item.split(" ")[0].charAt(0), mapaco.get(item.split(" ")[0].charAt(0))+1);
 			}
-//			System.out.println("El índice de acierto es de "+ (double)aciertos/lTest.size()*100.0);
 			brTraining.close();
 			brTest.close();
 			
@@ -223,7 +218,7 @@ public class KVecinos {
 
 
 
-	private static void PruebasConDosAlgoritmosBasica() throws IOException {
+	private static void ejecucionDosAlgoritmosVecinos() throws IOException {
 		BufferedWriter resultado;
 		resultado = new BufferedWriter(new FileWriter(new File("resultado.csv")));
 //		crearArchivosEquilibrados();
@@ -246,9 +241,6 @@ public class KVecinos {
 		resultado.close();
 	}
 
-	/**
-	 * 
-	 */
 	private static void PruebasDeKVecinos() {
 		inicializarKVecinos();
 		// Hago una pruebecica
@@ -262,9 +254,6 @@ public class KVecinos {
 		printKVecinos();
 	}
 
-	/**
-	 * 
-	 */
 	private static void PruebasConTodoVecinoMasCercano() {
 		Character letra = 'A';
 		BufferedWriter bw = null;
