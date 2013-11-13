@@ -12,42 +12,24 @@ import java.util.HashMap;
 
 public class KVecinos {
 	
-	public static Candidato vecinos[];
-	public static Integer nVecinos;
+	private static Candidato vecinos[];
+	private static Integer nVecinos;
 	
-	public static void checkKVecinos(Candidato candidato){
-		for(int i=0; i< nVecinos; i++){
-			if(candidato.getDistancia() < vecinos[i].getDistancia()){
-				Candidato aux = vecinos[i];
-				Candidato aux2;
-				vecinos[i] = candidato;
-				for(int j=i+1; j<nVecinos; j++){
-					aux2 = vecinos[j];
-					vecinos[j]= aux;
-					aux=aux2;
-				}
-				break;
-			}
-		}
+	public static void main(String[] args) throws IOException {
+		
+		//TODO: Aquí están diferentes pruebas. Entrad en los métodos y echar un vistazo. Son muy fáciles.
+		
+		PruebasConDosAlgoritmosBasica();		
+//		PruebasConTodoVecinoMasCercano();
+//		PruebasConTodoKVecinos();
+		
 	}
 	
-	public static void printKVecinos(){
-		for(int i=0; i<nVecinos; i++){
-			if(vecinos[i] != null)
-				System.out.println(vecinos[i].getDistancia());
-		}
-	}
 	
-	public static void inicializarKVecinos(){
-		vecinos = new Candidato[nVecinos];
-		// Inicializo el vector
-		for(int i=0; i<nVecinos; i++){
-			vecinos[i] = new Candidato("null", Integer.MAX_VALUE);
-		}
-	}
+	//TODO: Estos métodos son diferentes formas de ponderar los k-vecinos. Se invita a implementar más
 	
 	// Esto está por implementar
-	public static Character getMejorCandidatoSumando(){
+	private static Character getMejorCandidatoSumando(){
 		HashMap<Character, Integer> etiquetas = new HashMap<>();
 		for(int i=0; i<nVecinos; i++){
 			if(etiquetas.containsKey(vecinos[i].getEtiqueta())){
@@ -57,7 +39,7 @@ public class KVecinos {
 		return 'A';
 	}
 	
-	public static String getMejorCandidatoPonderando(){
+	private static String getMejorCandidatoPonderando(){
 		ArrayList<Candidato> mejores = new ArrayList<>();
 		for(Candidato v : vecinos){
 			boolean insertada = false;
@@ -71,17 +53,15 @@ public class KVecinos {
 			if(!insertada)
 				mejores.add(new Candidato(v.getEtiqueta(), (int)((1/(double)v.getDistancia())*1000)));
 		}
-//		for(Candidato c : mejores)
-//			System.out.println("Miro el candidato con distancia: "+c.getDistancia()+" y etiqueta "+c.getEtiqueta());
-		Collections.sort(mejores);
-		
+		Collections.sort(mejores);		
 		return mejores.get(0).getEtiqueta();
 	}
 	
 	public static void crearArchivosEquilibrados(){
+		//TODO: Esto se debería hacer para que reciba por parámetro el número de archivos y el número de líneas por archivo... Es bastante trivial, pero...
+		
 		HashMap<Character, ArrayList<String>> mapaco = new HashMap<Character, ArrayList<String>>();
 		Character inicial = 'A';
-		// Inicializo el hashmap
 		for(int i=0; i<26; i++){
 			ArrayList<String> letra = new ArrayList<>();
 			mapaco.put(inicial, letra);
@@ -89,7 +69,6 @@ public class KVecinos {
 			inicial++;
 		}
 		try {
-			// Leo y meto (no es un chiste sobre leo)
 			BufferedReader br1 = new BufferedReader(new FileReader(new File("Training.200.cad")));
 			String line = br1.readLine();
 			while(line != null){
@@ -106,7 +85,6 @@ public class KVecinos {
 			e.printStackTrace();
 		}
 		
-		// Escritura de los archivos
 		System.out.println("Vamos a hacer archivos!!!!!");
 		Character ini = 'A';
 		try{
@@ -243,13 +221,7 @@ public class KVecinos {
 		return mapaco;
 	}
 
-	public static void main(String[] args) throws IOException {
-		
-		PruebasConDosAlgoritmosBasica();		
-//		PruebasConTodoVecinoMasCercano();
-//		PruebasConTodoKVecinos();
-		
-	}
+
 
 	private static void PruebasConDosAlgoritmosBasica() throws IOException {
 		BufferedWriter resultado;
@@ -477,6 +449,37 @@ public class KVecinos {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	private static void checkKVecinos(Candidato candidato){
+		for(int i=0; i< nVecinos; i++){
+			if(candidato.getDistancia() < vecinos[i].getDistancia()){
+				Candidato aux = vecinos[i];
+				Candidato aux2;
+				vecinos[i] = candidato;
+				for(int j=i+1; j<nVecinos; j++){
+					aux2 = vecinos[j];
+					vecinos[j]= aux;
+					aux=aux2;
+				}
+				break;
+			}
+		}
+	}
+	
+	private static void printKVecinos(){
+		for(int i=0; i<nVecinos; i++){
+			if(vecinos[i] != null)
+				System.out.println(vecinos[i].getDistancia());
+		}
+	}
+	
+	private static void inicializarKVecinos(){
+		vecinos = new Candidato[nVecinos];
+		// Inicializo el vector
+		for(int i=0; i<nVecinos; i++){
+			vecinos[i] = new Candidato("null", Integer.MAX_VALUE);
 		}
 	}
 
