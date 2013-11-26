@@ -15,6 +15,12 @@ public class KVecinos {
 	private static Candidato vecinos[];
 	private static Integer nVecinos;
 	
+	/**
+	 * Qué va a puntuar: 	-Va a mirar el docs a la par que el código para corroborar lo que hemos hecho
+	 * 						-El estará 10 minutos con cada uno pero solo 5 podremos exponer lo hecho
+	 * 						-Tendremos que almacenar en disco todo lo requerido para clasificar una nueva entrada
+	 */
+	
 	public static void main(String[] args) throws IOException {
 		
 		//TODO: Aquí están diferentes pruebas. Entrad en los métodos y echar un vistazo. Son muy fáciles.
