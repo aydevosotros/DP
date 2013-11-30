@@ -40,8 +40,9 @@ public class kNN{
 		int maxCandidatosLetra = 0;
 		Character letra = null;
 		
-		Iterator it = etiquetas.entrySet().iterator();
+		Iterator<?> it = etiquetas.entrySet().iterator();
 		while (it.hasNext()) {
+			@SuppressWarnings("rawtypes")
 			Map.Entry e = (Map.Entry)it.next();
 			if((int)e.getValue() > maxCandidatosLetra){
 				maxCandidatosLetra = (int) e.getValue();
