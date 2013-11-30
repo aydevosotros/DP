@@ -21,6 +21,7 @@ public class P102 {
 	 */
 	
 	public static void main(String[] args) throws IOException {
+
 		
 		P102 pr = new P102();
 		//Aquí están diferentes pruebas. Entrad en los métodos y echar un vistazo. Son muy fáciles.
@@ -43,6 +44,8 @@ public class P102 {
 			letra++;
 		}
 		resultado.close();
+		
+//		pr.PruebasDeKVecinos();
 		//		PruebasConTodoVecinoMasCercano();
 		//		PruebasConTodoKVecinos();
 		
@@ -225,14 +228,15 @@ public class P102 {
 		kNN knn = new kNN();
 		knn.inicializarKVecinos();
 		// Hago una pruebecica
-		knn.checkKVecinos(new Candidato("A", 10));
-		knn.checkKVecinos(new Candidato("A", 5));
-		knn.checkKVecinos(new Candidato("A", 2));
-		knn.checkKVecinos(new Candidato("A", 44));
-		knn.checkKVecinos(new Candidato("A", 22));
-		knn.checkKVecinos(new Candidato("A", 1));
-		knn.checkKVecinos(new Candidato("A", 23));
-		knn.printKVecinos();
+		knn.checkKVecinos(new Candidato("G", 10));
+		knn.checkKVecinos(new Candidato("Q", 5));
+		knn.checkKVecinos(new Candidato("O", 3));
+		knn.checkKVecinos(new Candidato("C", 44));
+		knn.checkKVecinos(new Candidato("D", 22));
+		knn.checkKVecinos(new Candidato("O", 2));
+		knn.checkKVecinos(new Candidato("D", 23));
+//		knn.printKVecinos();
+		System.out.println(knn.getMejorCandidatoPonderando());
 	}
 
 	private void PruebasConTodoVecinoMasCercano() {
