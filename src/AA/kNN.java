@@ -10,6 +10,14 @@ public class kNN{
 	private Candidato vecinos[];
 	private Integer nVecinos;
 	
+	public Integer getnVecinos() {
+		return nVecinos;
+	}
+
+	public void setnVecinos(Integer nVecinos) {
+		this.nVecinos = nVecinos;
+	}
+
 	public ArrayList<String> getTrainingSet() {
 		return trainingSet;
 	}
@@ -21,7 +29,7 @@ public class kNN{
 	private ArrayList<String> trainingSet;
 	
 	kNN(){
-		nVecinos = 7;
+		nVecinos = 9;
 	}
 	
 	public Character getMejorCandidatoSumando(){

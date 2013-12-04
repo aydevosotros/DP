@@ -43,9 +43,9 @@ public class P102 {
 		// crearArchivosEquilibrados();
 
 		HashMap<Character, Integer> mapacoCercano = pr.vecinoMasCercano(
-				"salida0Mini.txt", "salida1Mini.txt");
+				"salida0.txt", "salida1.txt");
 		HashMap<Character, Integer> mapacoKCercanos = pr.kVecinosMasCercanos(
-				"salida0Mini.txt", "salida1Mini.txt");
+				"salida0.txt", "salida1.txt");
 
 		resultado.write("Data sets,Algorithm 1,Algorithm 2\n");
 
@@ -175,7 +175,7 @@ public class P102 {
 			e.printStackTrace();
 		}
 
-		System.out.println("Vamos a hacer archivos!!!!!");
+//		System.out.println("Vamos a hacer archivos!!!!!");
 		Character ini = 'A';
 		try {
 			for (int f = 0; f < 5; f++) {
@@ -237,16 +237,17 @@ public class P102 {
 			}
 			char mejorEtiqueta;
 			knn.setTrainingSet(lTraining);
+			int numAciertos = 0;
 			for (String item : lTest) {
 				mejorEtiqueta = getContourClass(item);
-				System.out.println("Este tiene la etiqueta "
-						+ item.split(" ")[0] + " y la mínima con kNN es "
-						+ mejorEtiqueta);
+//				System.out.println("Este tiene la etiqueta "+ item.split(" ")[0] + " y la mínima con kNN es "+ mejorEtiqueta);
 				if (item.split(" ")[0].charAt(0) == mejorEtiqueta) {
-					mapaco.put(item.split(" ")[0].charAt(0),
-							mapaco.get(item.split(" ")[0].charAt(0)) + 1);
+					mapaco.put(item.split(" ")[0].charAt(0),mapaco.get(item.split(" ")[0].charAt(0)) + 1);
+					numAciertos++;
 				}
 			}
+			System.out.println("kNN ha acertado un " + ((float)numAciertos/(float)lTest.size()*100));
+
 			brTraining.close();
 			brTest.close();
 
@@ -293,6 +294,7 @@ public class P102 {
 			}
 			int distanciaMin = Integer.MAX_VALUE;
 			String etiquetaMin = "";
+			int numAciertos = 0;
 			for (String item : lTest) {
 				distanciaMin = Integer.MAX_VALUE;
 				for (String item2 : lTraining) {
@@ -303,13 +305,15 @@ public class P102 {
 						etiquetaMin = item2.split(" ")[0];
 					}
 				}
-				System.out.println("Este tiene la etiqueta "
-						+ item.split(" ")[0] + " y la mínima con 1NN es "
-						+ etiquetaMin);
-				if (item.split(" ")[0].equals(etiquetaMin))
-					mapaco.put(item.split(" ")[0].charAt(0),
-							mapaco.get(item.split(" ")[0].charAt(0)) + 1);
+//				System.out.println("Este tiene la etiqueta "+ item.split(" ")[0] + " y la mínima con 1NN es "+ etiquetaMin);
+				if (item.split(" ")[0].equals(etiquetaMin)){
+					mapaco.put(item.split(" ")[0].charAt(0),mapaco.get(item.split(" ")[0].charAt(0)) + 1);
+					numAciertos++;
+					
+				}
 			}
+			
+			System.out.println("1NN ha acertado un " + ((float)numAciertos/(float)lTest.size()*100));
 			brTraining.close();
 			brTest.close();
 

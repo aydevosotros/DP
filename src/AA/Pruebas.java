@@ -6,8 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Pruebas {
+	
 	public static void PruebasDeKVecinos() {
 		kNN knn = new kNN();
 		knn.inicializarKVecinos();
@@ -218,4 +220,36 @@ public class Pruebas {
 			}
 		}
 	}
+
+	public static ArrayList<ArrayList<String>> bagging(ArrayList<String> training, int m, float percent){
+		ArrayList<ArrayList<String>> result = new ArrayList<>();
+		for(int i = 0; i < m; i++){
+			result.add(new ArrayList<>(training));
+			
+			
+			int elemToDel = (int)((float)result.get(i).size() * (1-percent));
+			
+			for(int j = 0; j < elemToDel; j++){
+				Random r = new Random(result.get(i).size()-1);
+				result.get(i).remove(r.nextInt());
+			}
+			
+		}
+		
+		return result;
+	}
+	
+	public static void pruebaMejorK(ArrayList<String> training, int m, float percent){
+		kNN knn = new kNN();
+		ArrayList<ArrayList<String>> baggingSet = bagging(training,m,percent);
+		for(int i = 0; i < 9; i=i+2){
+			knn.inicializarKVecinos();
+			knn.setnVecinos(i);
+			for(int j = 0; j < baggingSet.size(); j++){
+				knn.setTrainingSet(baggingSet.get(j));
+			}
+		}
+		
+	}
+	
 }
