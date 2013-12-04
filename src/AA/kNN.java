@@ -1,4 +1,4 @@
-package kVecinos;
+package AA;
 
 import java.util.ArrayList;
 import java.util.Collections;

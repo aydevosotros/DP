@@ -1,4 +1,4 @@
-package kVecinos;
+package AA;
 
 public class Candidato implements Comparable<Object> {
 	Candidato(String et, Integer dist) {
