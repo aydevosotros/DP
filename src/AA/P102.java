@@ -57,7 +57,7 @@ public class P102 {
 			System.out.println("Con el k vecinos: "
 					+ mapacoKCercanos.get(letra));
 			resultado.write(letra + "," + mapacoCercano.get(letra) + ","
-					+ mapacoCercano.get(letra) + "\n");
+					+ mapacoKCercanos.get(letra) + "\n");
 			letra++;
 		}
 		resultado.close();
