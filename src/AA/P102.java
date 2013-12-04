@@ -319,8 +319,7 @@ public class P102 {
 		return mapaco;
 	}
 
-<<<<<<< HEAD
-=======
+
 	private void PruebasDeKVecinos() {
 		kNN knn = new kNN();
 		knn.inicializarKVecinos();
@@ -530,6 +529,4 @@ public class P102 {
 			}
 		}
 	}
-
->>>>>>> branch 'master' of https://github.com/aydevosotros/DP.git
 }
