@@ -1,4 +1,4 @@
-package kVecinos;
+package AA;
 
 public class Levenshtein {
 	private static int minimum(int a, int b, int c) {
