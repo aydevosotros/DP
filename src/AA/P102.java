@@ -41,23 +41,24 @@ public class P102 {
 		resultado = new BufferedWriter(
 				new FileWriter(new File("resultado.csv")));
 		// crearArchivosEquilibrados();
+		
+		
+		//1NN ha acertado un 88.36538
+		//kNN (3) ha acertado un 88.65385
 
-		HashMap<Character, Integer> mapacoCercano = pr.vecinoMasCercano(
-				"salida0.txt", "salida1.txt");
-		HashMap<Character, Integer> mapacoKCercanos = pr.kVecinosMasCercanos(
-				"salida0.txt", "salida1.txt");
+
+		HashMap<Character, Integer> mapacoCercano = pr.vecinoMasCercano("salida0.txt");
+		HashMap<Character, Integer> mapacoKCercanos = pr.kVecinosMasCercanos("salida0.txt");
 
 		resultado.write("Data sets,Algorithm 1,Algorithm 2\n");
 
 		char letra = 'A';
 		for (int i = 0; i < 26; i++) {
 			System.out.println("Para la " + letra + ":");
-			System.out.println("Con el más cercano tengo: "
-					+ mapacoCercano.get(letra));
+			System.out.println("Con el más cercano tengo: "	+ mapacoCercano.get(letra));
 			System.out.println("Con el k vecinos: "
 					+ mapacoKCercanos.get(letra));
-			resultado.write(letra + "," + mapacoCercano.get(letra) + ","
-					+ mapacoKCercanos.get(letra) + "\n");
+			resultado.write(letra + "," + mapacoCercano.get(letra) + ","+ mapacoKCercanos.get(letra) + "\n");
 			letra++;
 		}
 		resultado.close();
@@ -205,8 +206,7 @@ public class P102 {
 	 * @param ficheroTraining
 	 * @return
 	 */
-	public HashMap<Character, Integer> kVecinosMasCercanos(String ficheroTest,
-			String ficheroTraining) {
+	public HashMap<Character, Integer> kVecinosMasCercanos(String ficheroTest) {
 		HashMap<Character, Integer> mapaco = new HashMap<>();
 
 		// Inicializo el vector de vecinos
@@ -219,16 +219,23 @@ public class P102 {
 				letra++;
 			}
 
-			BufferedReader brTraining = new BufferedReader(new FileReader(
-					new File(ficheroTraining)));
+
 			BufferedReader brTest = new BufferedReader(new FileReader(new File(
 					ficheroTest)));
 			ArrayList<String> lTraining = new ArrayList<>();
 			ArrayList<String> lTest = new ArrayList<>();
-			String line = brTraining.readLine();
-			while (line != null) {
-				lTraining.add(line);
-				line = brTraining.readLine();
+			String line;
+			BufferedReader brTraining = null;
+			for(int i = 0; i < 5; i++){
+				String fileToLoad = "salida"+i+".txt";
+				if(!fileToLoad.equals(ficheroTest)){
+					brTraining = new BufferedReader(new FileReader(new File(fileToLoad)));
+					line = brTraining.readLine();
+					while (line != null) {
+						lTraining.add(line);
+						line = brTraining.readLine();
+					}
+				}
 			}
 			line = brTest.readLine();
 			while (line != null) {
@@ -265,8 +272,7 @@ public class P102 {
 	 * @param ficheroTest
 	 * @param ficheroTraining
 	 */
-	public HashMap<Character, Integer> vecinoMasCercano(String ficheroTest,
-			String ficheroTraining) {
+	public HashMap<Character, Integer> vecinoMasCercano(String ficheroTest) {
 		HashMap<Character, Integer> mapaco = new HashMap<>();
 		try {
 			Character letra = 'A';
@@ -276,16 +282,22 @@ public class P102 {
 				letra++;
 			}
 
-			BufferedReader brTraining = new BufferedReader(new FileReader(
-					new File(ficheroTraining)));
 			BufferedReader brTest = new BufferedReader(new FileReader(new File(
 					ficheroTest)));
 			ArrayList<String> lTraining = new ArrayList<>();
 			ArrayList<String> lTest = new ArrayList<>();
-			String line = brTraining.readLine();
-			while (line != null) {
-				lTraining.add(line);
-				line = brTraining.readLine();
+			String line;
+			BufferedReader brTraining = null;
+			for(int i = 0; i < 5; i++){
+				String fileToLoad = "salida"+i+".txt";
+				if(!fileToLoad.equals(ficheroTest)){
+					brTraining = new BufferedReader(new FileReader(new File(fileToLoad)));
+					line = brTraining.readLine();
+					while (line != null) {
+						lTraining.add(line);
+						line = brTraining.readLine();
+					}
+				}
 			}
 			line = brTest.readLine();
 			while (line != null) {

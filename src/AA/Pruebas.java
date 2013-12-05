@@ -74,7 +74,7 @@ public class Pruebas {
 				if (i != j) {
 					// System.out.println("Procesando fichero: salida"+i+".txt");
 					HashMap<Character, Integer> aciertos = p.kVecinosMasCercanos(
-							"salida" + i + ".txt", "salida" + j + ".txt");
+							"salida" + i + ".txt");
 					letra = 'A';
 					for (int k = 0; k < 26; k++) {
 						Integer parcial = aciertos.get(letra);
@@ -172,7 +172,7 @@ public class Pruebas {
 				if (i != j) {
 					// System.out.println("Procesando fichero: salida"+i+".txt");
 					HashMap<Character, Integer> aciertos = p.vecinoMasCercano(
-							"salida" + i + ".txt", "salida" + j + ".txt");
+							"salida" + i + ".txt");
 					letra = 'A';
 					for (int k = 0; k < 26; k++) {
 						Integer parcial = aciertos.get(letra);

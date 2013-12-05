@@ -29,19 +29,17 @@ public class kNN{
 	private ArrayList<String> trainingSet;
 	
 	kNN(){
-		nVecinos = 9;
+		nVecinos = 3;
 	}
 	
 	public Character getMejorCandidatoSumando(){
 		HashMap<Character, Integer> etiquetas = new HashMap<>();
-		ArrayList<Character> claves = new ArrayList<>();
 		for(int i=0; i<vecinos.length; i++){
 			if(etiquetas.get(vecinos[i].getEtiqueta().charAt(0)) != null){
 				etiquetas.put(vecinos[i].getEtiqueta().charAt(0), etiquetas.get(vecinos[i].getEtiqueta().charAt(0))+1);
 			}
 			else{
 				etiquetas.put(vecinos[i].getEtiqueta().charAt(0), 1);
-				claves.add(vecinos[i].getEtiqueta().charAt(0));
 			}
 		}
 		
@@ -67,13 +65,13 @@ public class kNN{
 			boolean insertada = false;
 			for(Candidato m : mejores){			
 				if(m.getEtiqueta() == v.getEtiqueta()){
-					m.setDistancia(m.getDistancia()+(int)((1/(double)v.getDistancia())*1000));
+					m.setDistancia(m.getDistancia()+(int)(((1/(double)v.getDistancia())*1000)));
 					insertada = true;
 					break;
 				}				
 			}
 			if(!insertada)
-				mejores.add(new Candidato(v.getEtiqueta(), (int)((1/(double)v.getDistancia())*1000)));
+				mejores.add(new Candidato(v.getEtiqueta(), (int)(((1/(double)v.getDistancia())*1000))));
 		}
 		Collections.sort(mejores);
 		
