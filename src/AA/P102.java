@@ -46,21 +46,45 @@ public class P102 {
 		//1NN ha acertado un 88.36538
 		//kNN (3) ha acertado un 88.65385
 
-
-		HashMap<Character, Integer> mapacoCercano = pr.vecinoMasCercano("salida0.txt");
-		HashMap<Character, Integer> mapacoKCercanos = pr.kVecinosMasCercanos("salida0.txt");
+		ArrayList<HashMap<Character, Integer>> mapacoCercano = new ArrayList<>();
+		ArrayList<HashMap<Character, Integer>> mapacoKCercanos = new ArrayList<>();
+		
+		//Valor de las k a probar
+		int test1 = 1;
+		int test2 = 3;
+		
+		
+		for(int i = 0; i < 5; i++)
+		{
+			pr.setNumVecinosCercanos(test1);
+			mapacoCercano.add(pr.kVecinosMasCercanos("salida" + i + ".txt"));
+			pr.setNumVecinosCercanos(test2);
+			mapacoKCercanos.add(pr.kVecinosMasCercanos("salida" + i + ".txt"));
+		}
 
 		resultado.write("Data sets,Algorithm 1,Algorithm 2\n");
 
 		char letra = 'A';
+		int aciertosTotales1 = 0;
+		int aciertosTotales2 = 0;
 		for (int i = 0; i < 26; i++) {
+			int aciertosLetra1 = 0;
+			int aciertosLetra2 = 0;
+
+			for(int j = 0; j < 5; j++){
+				aciertosLetra1 += mapacoCercano.get(j).get(letra);
+				aciertosLetra2 += mapacoKCercanos.get(j).get(letra);
+			}
+			aciertosTotales1 += aciertosLetra1;
+			aciertosTotales2 += aciertosLetra2;
 			System.out.println("Para la " + letra + ":");
-			System.out.println("Con el más cercano tengo: "	+ mapacoCercano.get(letra));
-			System.out.println("Con el k vecinos: "
-					+ mapacoKCercanos.get(letra));
-			resultado.write(letra + "," + mapacoCercano.get(letra) + ","+ mapacoKCercanos.get(letra) + "\n");
+			System.out.println("Con el " + test1 + " vecinos tengo: "	+ aciertosLetra1);
+			System.out.println("Con el " + test2 + " vecinos tengo: "	+ aciertosLetra2);
+			resultado.write(letra + "," + aciertosLetra1 + ","+ aciertosLetra2 + "\n");
 			letra++;
 		}
+		System.out.println("El " + test1 + " vecinos tengo un porcentaje de acierto de: "	+ ((float)aciertosTotales1/5200.0)*100.0);
+		System.out.println("El " + test2 + " vecinos tengo un porcentaje de acierto de: "	+ ((float)aciertosTotales2/5200.0)*100.0);
 		resultado.close();
 
 		// pr.PruebasDeKVecinos();
@@ -71,6 +95,10 @@ public class P102 {
 
 	P102() {
 		knn = new kNN();
+	}
+	
+	void setNumVecinosCercanos(int nvecinos){
+		knn.setnVecinos(nvecinos);
 	}
 
 	void ExportTrainingSet(ArrayList<String> T) {
@@ -253,7 +281,7 @@ public class P102 {
 					numAciertos++;
 				}
 			}
-			System.out.println("kNN ha acertado un " + ((float)numAciertos/(float)lTest.size()*100));
+//			System.out.println(knn.getnVecinos() + "NN ha acertado un " + ((float)numAciertos/(float)lTest.size()*100));
 
 			brTraining.close();
 			brTest.close();
