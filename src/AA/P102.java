@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Random;
 
 public class P102 {
 
@@ -46,18 +47,18 @@ public class P102 {
 		//1NN ha acertado un 88.36538
 		//kNN (3) ha acertado un 88.65385
 
-		ArrayList<HashMap<Character, Integer>> mapacoCercano = new ArrayList<>();
+//		ArrayList<HashMap<Character, Integer>> mapacoCercano = new ArrayList<>();
 		ArrayList<HashMap<Character, Integer>> mapacoKCercanos = new ArrayList<>();
 		
 		//Valor de las k a probar
-		int test1 = 1;
+//		int test1 = 1;
 		int test2 = 3;
 		
 		
 		for(int i = 0; i < 5; i++)
 		{
-			pr.setNumVecinosCercanos(test1);
-			mapacoCercano.add(pr.kVecinosMasCercanos("salida" + i + ".txt"));
+//			pr.setNumVecinosCercanos(test1);
+//			mapacoCercano.add(pr.kVecinosMasCercanos("salida" + i + ".txt"));
 			pr.setNumVecinosCercanos(test2);
 			mapacoKCercanos.add(pr.kVecinosMasCercanos("salida" + i + ".txt"));
 		}
@@ -72,24 +73,20 @@ public class P102 {
 			int aciertosLetra2 = 0;
 
 			for(int j = 0; j < 5; j++){
-				aciertosLetra1 += mapacoCercano.get(j).get(letra);
+//				aciertosLetra1 += mapacoCercano.get(j).get(letra);
 				aciertosLetra2 += mapacoKCercanos.get(j).get(letra);
 			}
 			aciertosTotales1 += aciertosLetra1;
 			aciertosTotales2 += aciertosLetra2;
 			System.out.println("Para la " + letra + ":");
-			System.out.println("Con el " + test1 + " vecinos tengo: "	+ aciertosLetra1);
+//			System.out.println("Con el " + test1 + " vecinos tengo: "	+ aciertosLetra1);
 			System.out.println("Con el " + test2 + " vecinos tengo: "	+ aciertosLetra2);
 			resultado.write(letra + "," + aciertosLetra1 + ","+ aciertosLetra2 + "\n");
 			letra++;
 		}
-		System.out.println("El " + test1 + " vecinos tengo un porcentaje de acierto de: "	+ ((float)aciertosTotales1/5200.0)*100.0);
+//		System.out.println("El " + test1 + " vecinos tengo un porcentaje de acierto de: "	+ ((float)aciertosTotales1/5200.0)*100.0);
 		System.out.println("El " + test2 + " vecinos tengo un porcentaje de acierto de: "	+ ((float)aciertosTotales2/5200.0)*100.0);
 		resultado.close();
-
-		// pr.PruebasDeKVecinos();
-		// PruebasConTodoVecinoMasCercano();
-		// PruebasConTodoKVecinos();
 
 	}
 
@@ -133,15 +130,33 @@ public class P102 {
 	ArrayList<String> Editing(int k, ArrayList<String> T) { // Training set
 		ArrayList<String> S = new ArrayList<String>(T), // Edited set
 		R = new ArrayList<String>(); // Misclassified set
+		knn.setTrainingSet(S);
 		for (String p : S) {
-			knn.setTrainingSet(S);
-			if (p.charAt(0) == getContourClass(p)) { // Misclassified example
+			if (p.charAt(0) != getContourClass(p)) { // Misclassified example
 				R.add(p);
 				// Remove example
 			}
 		} // for
 		S.removeAll(R);
 		// Remove all misclassified examples
+		return S;
+	}
+	
+	ArrayList<String> MultiEdit(int k, ArrayList<String> T) { // Training set
+		ArrayList<String> S = new ArrayList<String>(T); // Edited set
+		ArrayList<String> R;
+		do{
+			R = new ArrayList<String>(); // Misclassified set
+			knn.setTrainingSet(S);
+			for (String p : S) {
+				if (p.charAt(0) != getContourClass(p)) { // Misclassified example
+					R.add(p);
+					// Remove example
+				}
+			} // for
+			S.removeAll(R);
+			// Remove all misclassified examples
+		}while(!R.isEmpty());
 		return S;
 	}
 
@@ -151,8 +166,10 @@ public class P102 {
 		Collections.shuffle(T); // Shuffle array elements
 		do {
 			updated = false;
+			knn.setTrainingSet(T);
+			knn.setnVecinos(k);
 			for (String p : T) {
-				if (p.charAt(0) == getContourClass(p)) { // Misclassified
+				if (p.charAt(0) != getContourClass(p)) { // Misclassified
 															// example
 					S.add(p);
 					// It ’s needed
@@ -271,7 +288,12 @@ public class P102 {
 				line = brTest.readLine();
 			}
 			char mejorEtiqueta;
-			knn.setTrainingSet(lTraining);
+			
+//			knn.setTrainingSet(lTraining);;
+			//knn.setTrainingSet(CNN(knn.getnVecinos(), lTraining));
+			knn.setTrainingSet(Editing(knn.getnVecinos(), lTraining));
+			//knn.setTrainingSet(MultiEdit(knn.getnVecinos(), lTraining));
+
 			int numAciertos = 0;
 			for (String item : lTest) {
 				mejorEtiqueta = getContourClass(item);
@@ -361,5 +383,36 @@ public class P102 {
 			e.printStackTrace();
 		}
 		return mapaco;
+	}
+	
+	public static ArrayList<ArrayList<String>> bagging(ArrayList<String> training, int m, float percent){
+		ArrayList<ArrayList<String>> result = new ArrayList<>();
+		for(int i = 0; i < m; i++){
+			result.add(new ArrayList<>(training));
+			
+			
+			int elemToDel = (int)((float)result.get(i).size() * (1-percent));
+			
+			for(int j = 0; j < elemToDel; j++){
+				Random r = new Random(result.get(i).size()-1);
+				result.get(i).remove(r.nextInt());
+			}
+			
+		}
+		
+		return result;
+	}
+	
+	public static void pruebaMejorK(ArrayList<String> training, int m, float percent){
+		kNN knn = new kNN();
+		ArrayList<ArrayList<String>> baggingSet = bagging(training,m,percent);
+		for(int i = 0; i < 9; i=i+2){
+			knn.inicializarKVecinos();
+			knn.setnVecinos(i);
+			for(int j = 0; j < baggingSet.size(); j++){
+				knn.setTrainingSet(baggingSet.get(j));
+			}
+		}
+		
 	}
 }
