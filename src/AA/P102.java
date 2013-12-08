@@ -52,7 +52,7 @@ public class P102 {
 		
 		//Valor de las k a probar
 //		int test1 = 1;
-		int test2 = 3;
+		int test2 = 1;
 		
 		
 		for(int i = 0; i < 5; i++)
@@ -87,6 +87,10 @@ public class P102 {
 //		System.out.println("El " + test1 + " vecinos tengo un porcentaje de acierto de: "	+ ((float)aciertosTotales1/5200.0)*100.0);
 		System.out.println("El " + test2 + " vecinos tengo un porcentaje de acierto de: "	+ ((float)aciertosTotales2/5200.0)*100.0);
 		resultado.close();
+
+		// pr.PruebasDeKVecinos();
+		// PruebasConTodoVecinoMasCercano();
+		// PruebasConTodoKVecinos();
 
 	}
 
@@ -128,9 +132,11 @@ public class P102 {
 	}
 
 	ArrayList<String> Editing(int k, ArrayList<String> T) { // Training set
+		boolean prevMode = knn.isModoPonderando();
 		ArrayList<String> S = new ArrayList<String>(T), // Edited set
 		R = new ArrayList<String>(); // Misclassified set
 		knn.setTrainingSet(S);
+		knn.setModoPonderando(false);
 		for (String p : S) {
 			if (p.charAt(0) != getContourClass(p)) { // Misclassified example
 				R.add(p);
@@ -139,12 +145,16 @@ public class P102 {
 		} // for
 		S.removeAll(R);
 		// Remove all misclassified examples
+		knn.setModoPonderando(prevMode);
 		return S;
 	}
 	
 	ArrayList<String> MultiEdit(int k, ArrayList<String> T) { // Training set
 		ArrayList<String> S = new ArrayList<String>(T); // Edited set
 		ArrayList<String> R;
+		boolean prevMode = knn.isModoPonderando();
+		knn.setModoPonderando(false);
+
 		do{
 			R = new ArrayList<String>(); // Misclassified set
 			knn.setTrainingSet(S);
@@ -157,6 +167,8 @@ public class P102 {
 			S.removeAll(R);
 			// Remove all misclassified examples
 		}while(!R.isEmpty());
+		knn.setModoPonderando(prevMode);
+
 		return S;
 	}
 
@@ -164,6 +176,9 @@ public class P102 {
 		ArrayList<String> S = new ArrayList<String>(); // CNN set
 		boolean updated;
 		Collections.shuffle(T); // Shuffle array elements
+		boolean prevMode = knn.isModoPonderando();
+		knn.setModoPonderando(false);
+
 		do {
 			updated = false;
 			knn.setTrainingSet(T);
@@ -177,6 +192,7 @@ public class P102 {
 				}
 			}
 		} while (S.size() < T.size() && updated);
+		knn.setModoPonderando(prevMode);
 
 		return S;
 	}
@@ -190,7 +206,10 @@ public class P102 {
 			Candidato candidato = new Candidato(item2.split(" ")[0], distancia);
 			knn.checkKVecinos(candidato);
 		}
-		return knn.getMejorCandidatoPonderando().charAt(0);
+		if(knn.isModoPonderando())
+			return knn.getMejorCandidatoPonderando().charAt(0);
+		else
+			return knn.getMejorCandidatoSumando();
 	}
 
 	public void createFiveFoldCrossValidation() {

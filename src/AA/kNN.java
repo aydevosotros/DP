@@ -9,9 +9,18 @@ import java.util.Map;
 public class kNN{
 	private Candidato vecinos[];
 	private Integer nVecinos;
+	private boolean modoPonderando;
 	
 	public Integer getnVecinos() {
 		return nVecinos;
+	}
+
+	public boolean isModoPonderando() {
+		return modoPonderando;
+	}
+
+	public void setModoPonderando(boolean modoPonderando) {
+		this.modoPonderando = modoPonderando;
 	}
 
 	public void setnVecinos(Integer nVecinos) {
@@ -29,7 +38,9 @@ public class kNN{
 	private ArrayList<String> trainingSet;
 	
 	kNN(){
-		nVecinos = 3;
+		nVecinos = 5;
+		modoPonderando = true;
+		
 	}
 	
 	public Character getMejorCandidatoSumando(){
