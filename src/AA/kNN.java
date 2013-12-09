@@ -38,7 +38,7 @@ public class kNN{
 	private ArrayList<String> trainingSet;
 	
 	kNN(){
-		nVecinos = 5;
+		nVecinos = 3;
 		modoPonderando = true;
 		
 	}

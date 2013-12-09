@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class P102 {
 
-	private kNN knn;
+	public kNN knn;
 
 	/**
 	 * Qué va a puntuar: -Va a mirar el docs a la par que el código para
@@ -35,6 +35,25 @@ public class P102 {
 	public static void main(String[] args) throws IOException {
 
 		P102 pr = new P102();
+		//System.out.println(pr.getContourClass("3334445555556566655554344345455554556678887887888776766656676777811111222212111818818111211111123433455455543222221211"));
+
+		ArrayList<String> lTraining = new ArrayList<>();
+		String line;
+		BufferedReader brTraining = null;
+		brTraining = new BufferedReader(new FileReader(new File("Training.200.cad")));
+		line = brTraining.readLine();
+		while (line != null) {
+			lTraining.add(line);
+			line = brTraining.readLine();
+		}
+		brTraining.close();
+		
+		pr.ExportTrainingSet(pr.MultiEdit(3, lTraining));
+		
+		
+		
+		
+		/*
 		// Aquí están diferentes pruebas. Entrad en los métodos y echar un
 		// vistazo. Son muy fáciles.
 
@@ -52,7 +71,7 @@ public class P102 {
 		
 		//Valor de las k a probar
 //		int test1 = 1;
-		int test2 = 1;
+		int test2 = 5;
 		
 		
 		for(int i = 0; i < 5; i++)
@@ -91,11 +110,13 @@ public class P102 {
 		// pr.PruebasDeKVecinos();
 		// PruebasConTodoVecinoMasCercano();
 		// PruebasConTodoKVecinos();
-
+*/
 	}
 
 	P102() {
 		knn = new kNN();
+//		knn.setTrainingSet(ImportTrainingSet());
+
 	}
 	
 	void setNumVecinosCercanos(int nvecinos){
@@ -138,7 +159,7 @@ public class P102 {
 		knn.setTrainingSet(S);
 		knn.setModoPonderando(false);
 		for (String p : S) {
-			if (p.charAt(0) != getContourClass(p)) { // Misclassified example
+			if (p.charAt(0) != getContourClass(p.split(" ")[1])) { // Misclassified example
 				R.add(p);
 				// Remove example
 			}
@@ -159,7 +180,7 @@ public class P102 {
 			R = new ArrayList<String>(); // Misclassified set
 			knn.setTrainingSet(S);
 			for (String p : S) {
-				if (p.charAt(0) != getContourClass(p)) { // Misclassified example
+				if (p.charAt(0) != getContourClass(p.split(" ")[1])) { // Misclassified example
 					R.add(p);
 					// Remove example
 				}
@@ -184,7 +205,7 @@ public class P102 {
 			knn.setTrainingSet(T);
 			knn.setnVecinos(k);
 			for (String p : T) {
-				if (p.charAt(0) != getContourClass(p)) { // Misclassified
+				if (p.charAt(0) != getContourClass(p.split(" ")[1])) { // Misclassified
 															// example
 					S.add(p);
 					// It ’s needed
@@ -202,7 +223,7 @@ public class P102 {
 		knn.inicializarKVecinos();
 		for (String item2 : knn.getTrainingSet()) {
 			int distancia = Levenshtein.computeLevenshteinDistance(
-					example.split(" ")[1], item2.split(" ")[1]);
+					example, item2.split(" ")[1]);
 			Candidato candidato = new Candidato(item2.split(" ")[0], distancia);
 			knn.checkKVecinos(candidato);
 		}
@@ -313,17 +334,37 @@ public class P102 {
 			knn.setTrainingSet(Editing(knn.getnVecinos(), lTraining));
 			//knn.setTrainingSet(MultiEdit(knn.getnVecinos(), lTraining));
 
-			int numAciertos = 0;
 			for (String item : lTest) {
-				mejorEtiqueta = getContourClass(item);
+				mejorEtiqueta = getContourClass(item.split(" ")[1]);
 //				System.out.println("Este tiene la etiqueta "+ item.split(" ")[0] + " y la mínima con kNN es "+ mejorEtiqueta);
 				if (item.split(" ")[0].charAt(0) == mejorEtiqueta) {
 					mapaco.put(item.split(" ")[0].charAt(0),mapaco.get(item.split(" ")[0].charAt(0)) + 1);
-					numAciertos++;
 				}
 			}
 //			System.out.println(knn.getnVecinos() + "NN ha acertado un " + ((float)numAciertos/(float)lTest.size()*100));
 
+			
+			/*//Método aplicado con bagging
+			  ArrayList<ArrayList<String>> trainingBagging = bagging(lTraining, 5, 70);
+			  for(int l = 0; l < trainingBagging.size(); l++){
+				  char mejorEtiqueta1;
+					
+//					knn.setTrainingSet(lTraining);;
+					//knn.setTrainingSet(CNN(knn.getnVecinos(), lTraining));
+					knn.setTrainingSet(Editing(knn.getnVecinos(), trainingBagging.get(l)));
+					//knn.setTrainingSet(MultiEdit(knn.getnVecinos(), lTraining));
+
+					for (String item : lTest) {
+						mejorEtiqueta1 = getContourClass(item.split(" ")[1]);
+//						System.out.println("Este tiene la etiqueta "+ item.split(" ")[0] + " y la mínima con kNN es "+ mejorEtiqueta);
+						if (item.split(" ")[0].charAt(0) == mejorEtiqueta1) {
+							mapaco.put(item.split(" ")[0].charAt(0),mapaco.get(item.split(" ")[0].charAt(0)) + 1);
+						}
+					}
+			  }
+			  */
+			 
+			 
 			brTraining.close();
 			brTest.close();
 
